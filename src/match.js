@@ -1,4 +1,4 @@
-import { h, Component } from 'preact';
+import React, { Component } from 'react';
 import { subscribers, getCurrentUrl, Link as StaticLink } from 'preact-router';
 
 export class Match extends Component {

@@ -1,4 +1,4 @@
-import { h } from 'preact';
+import { react } from 'react';
 import assertCloneOf from '../test_helpers/assert-clone-of';
 
 const router = require('../');

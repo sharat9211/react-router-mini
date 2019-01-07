@@ -16,9 +16,9 @@ export default {
 	sourceMap: true,
 	useStrict: false,
 	format,
-	external: ['preact'],
+	external: ['react'],
 	globals: {
-		preact: 'preact'
+		react: 'react'
 	},
 	plugins: [
 		format!=='es' && memory({
@@ -27,7 +27,7 @@ export default {
 		}),
 
 		buble({
-			jsx: 'h'
+			jsx: 'React'
 		}),
 
 		// strip Object.freeze()

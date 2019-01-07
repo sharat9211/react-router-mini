@@ -1,4 +1,4 @@
-import { cloneElement } from 'preact';
+import { cloneElement } from 'react';
 
 export default function assertCloneOf({ Assertion }) {
 	if (Assertion.__assertCloneOfMounted === true) return;

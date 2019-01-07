@@ -1,4 +1,4 @@
-import * as preact from 'preact';
+import * as React from 'react';
 
 export function route(url: string, replace?: boolean): boolean;
 export function route(options: { url: string; replace?: boolean }): boolean;
@@ -26,8 +26,8 @@ export interface RouterOnChangeArgs {
     router: Router;
     url: string;
     previous?: string;
-    active: preact.VNode[];
-    current: preact.VNode;
+    active: React.VNode[];
+    current: React.VNode;
 }
 
 export interface RouterProps extends RoutableProps {
@@ -37,22 +37,22 @@ export interface RouterProps extends RoutableProps {
     onChange?: (args: RouterOnChangeArgs) => void;
 }
 
-export class Router extends preact.Component<RouterProps, {}> {
+export class Router extends React.Component<RouterProps, {}> {
     canRoute(url: string): boolean;
     getMatchingChildren(
-        children: preact.VNode[],
+        children: React.VNode[],
         url: string,
         invoke: boolean
-    ): preact.VNode[];
+    ): React.VNode[];
     routeTo(url: string): boolean;
-    render(props: RouterProps, {}): preact.VNode;
+    render(props: RouterProps, {}): React.VNode;
 }
 
 export const subscribers: Array<(url: string) => void>
 
 type AnyComponent<Props> =
-  | preact.FunctionalComponent<Props>
-  | preact.ComponentConstructor<Props, any>;
+  | React.FunctionalComponent<Props>
+  | React.ComponentConstructor<Props, any>;
 
 export interface RouteProps<Props> extends RoutableProps {
     component: AnyComponent<Props>;
@@ -60,9 +60,9 @@ export interface RouteProps<Props> extends RoutableProps {
 
 export function Route<Props>(
     props: RouteProps<Props> & Partial<Props>
-): preact.VNode;
+): React.VNode;
 
-export function Link(props: {activeClassName?: string} & JSX.HTMLAttributes): preact.VNode;
+export function Link(props: {activeClassName?: string} & JSX.HTMLAttributes): React.VNode;
 
 declare module 'preact' {
     export interface Attributes extends RoutableProps {}

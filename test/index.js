@@ -1,5 +1,5 @@
 import { Router, Link, route } from 'src';
-import { h } from 'preact';
+import { React } from 'react';
 import assertCloneOf from '../test_helpers/assert-clone-of';
 
 chai.use(assertCloneOf);

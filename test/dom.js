@@ -1,6 +1,6 @@
 import { Router, Link, route } from 'src';
 import { Match, Link as ActiveLink } from 'src/match';
-import { h, render } from 'preact';
+import { React, render } from 'react';
 
 const Empty = () => null;
 
