@@ -10,16 +10,17 @@ const subscribers = [];
 const EMPTY = {};
 
 function isReactElement(node) {
-  return (
-    React.isValidElement(node)
-  );
+  return React.isValidElement(node);
 }
 
 function setUrl(url, type = "push") {
   if (customHistory && customHistory[type]) {
     customHistory[type](url);
-  } else if (typeof history !== "undefined" && history[type + "State"]) {
-    history[type + "State"](null, null, url);
+  } else if (
+    typeof window.history !== "undefined" &&
+    window.history[type + "State"]
+  ) {
+    window.history[type + "State"](null, null, url);
   }
 }
 
@@ -30,7 +31,7 @@ function getCurrentUrl() {
   } else if (customHistory && customHistory.getCurrentLocation) {
     url = customHistory.getCurrentLocation();
   } else {
-    url = typeof location !== "undefined" ? location : EMPTY;
+    url = typeof window.location !== "undefined" ? window.location : EMPTY;
   }
   return `${url.pathname || ""}${url.search || ""}`;
 }
@@ -128,13 +129,13 @@ let eventListenersInitialized = false;
 function initEventListeners() {
   if (eventListenersInitialized) return;
 
-  if (typeof addEventListener === "function") {
+  if (typeof window.addEventListener === "function") {
     if (!customHistory) {
-      addEventListener("popstate", () => {
+      window.addEventListener("popstate", () => {
         routeTo(getCurrentUrl());
       });
     }
-    addEventListener("click", delegateLinkHandler);
+    window.addEventListener("click", delegateLinkHandler);
   }
   eventListenersInitialized = true;
 }
@@ -209,7 +210,7 @@ class Router extends Component {
       .filter(prepareVNodeForRanking)
       .sort(pathRankSort)
       .map(vnode => {
-        let matches = exec(url, vnode.attributes.path, vnode.attributes);
+        let matches = exec(url, vnode.props.path, vnode.props);
         if (matches) {
           if (invoke !== false) {
             let newProps = { url, matches };
@@ -224,19 +225,24 @@ class Router extends Component {
       .filter(Boolean);
   }
 
-  render({ children, onChange }, { url }) {
-    let active = this.getMatchingChildren(children, url, true);
+  render() {
+    console.log(this.props.children);
+    let active = this.getMatchingChildren(
+      this.props.children,
+      this.state.url,
+      true
+    );
 
     let current = active[0] || null;
     this._didRoute = !!current;
 
     let previous = this.previousUrl;
-    if (url !== previous) {
-      this.previousUrl = url;
-      if (typeof onChange === "function") {
-        onChange({
+    if (this.state.url !== previous) {
+      this.previousUrl = this.state.url;
+      if (typeof this.props.onChange === "function") {
+        this.props.onChange({
           router: this,
-          url,
+          url: this.state.url,
           previous,
           active,
           current
@@ -248,9 +254,10 @@ class Router extends Component {
   }
 }
 
-const Link = props => h("a", assign({ onClick: handleLinkClick }, props));
+const Link = props =>
+  React.createElement("a", assign({ onClick: handleLinkClick }, props));
 
-const Route = props => h(props.component, props);
+const Route = props => React.createElement(props.component, props);
 
 Router.subscribers = subscribers;
 Router.getCurrentUrl = getCurrentUrl;
